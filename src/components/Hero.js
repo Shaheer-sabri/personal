@@ -28,7 +28,31 @@ const Hero = () => {
       <a href="#projects" className="btn btn-secondary">View Work</a>
     </div>
     <div className="social-links">
-      {/* your social links */}
+      <a 
+            href="https://linkedin.com/in/syed-shaheer-sabri" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="social-link" 
+            aria-label="LinkedIn"
+          >
+            <i className="fab fa-linkedin-in"></i>
+          </a>
+          <a 
+            href="https://github.com/Shaheer-sabri" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="social-link" 
+            aria-label="GitHub"
+          >
+            <i className="fab fa-github"></i>
+          </a>
+          <a 
+            href="mailto:syedshaheersabri@gmail.com" 
+            className="social-link" 
+            aria-label="Email"
+          >
+            <i className="fas fa-envelope"></i>
+          </a>
     </div>
     <div className="resume-download">
       <button className="btn btn-primary" onClick={downloadResume}>
