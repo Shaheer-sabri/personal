@@ -559,19 +559,19 @@ nav {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   background: var(--glass);
   color: var(--text-primary);
   border: none;
   font-size: 2rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  z-index: 10;
+  z-index: 2;
   backdrop-filter: blur(10px);
   border-radius: 50%;
   transition: all 0.3s ease;
@@ -583,11 +583,11 @@ nav {
 }
 
 .scroll-btn.left {
-  left: -10px;
+  margin-right: 1rem;
 }
 
 .scroll-btn.right {
-  right: -10px;
+  margin-left: 1rem;
 }
 
 .projects-grid {
@@ -595,7 +595,7 @@ nav {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   gap: 2rem;
-  padding: 2rem 0;
+  padding: 1rem 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -610,6 +610,25 @@ nav {
   scroll-snap-align: start;
 }
 
+.scroll-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: var(--accent);
+}
 
 /* Experience Section */
 .experience-timeline {

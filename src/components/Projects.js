@@ -1,18 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const Projects = () => {
   const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    const container = scrollRef.current;
-    const scrollAmount = 400; // adjust as needed
-    if (container) {
-      container.scrollBy({
-        left: direction * scrollAmount,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const [visibleIndex, setVisibleIndex] = useState(0);
 
   const projects = [
     {
@@ -41,6 +31,43 @@ const Projects = () => {
     }
   ];
 
+  const scrollToCard = (index) => {
+    const container = scrollRef.current;
+    const cardWidth = container?.children[0]?.offsetWidth || 0;
+    container.scrollTo({
+      left: index * (cardWidth + 32), // 32px is gap between cards
+      behavior: 'smooth',
+    });
+  };
+
+  const scroll = (direction) => {
+    const newIndex = (visibleIndex + direction + projects.length) % projects.length;
+    setVisibleIndex(newIndex);
+    scrollToCard(newIndex);
+  };
+
+  const updateIndexOnScroll = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const cardWidth = container.children[0]?.offsetWidth || 0;
+    const index = Math.round(scrollLeft / (cardWidth + 32));
+    setVisibleIndex(index);
+  };
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (container) {
+      container.addEventListener('scroll', updateIndexOnScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', updateIndexOnScroll);
+      }
+    };
+  }, []);
+
   return (
     <section id="projects" className="section">
       <div className="container">
@@ -67,6 +94,19 @@ const Projects = () => {
           </div>
 
           <button onClick={() => scroll(1)} className="scroll-btn right">›</button>
+        </div>
+
+        <div className="scroll-indicators">
+          {projects.map((_, idx) => (
+            <span
+              key={idx}
+              className={`indicator-dot ${idx === visibleIndex ? 'active' : ''}`}
+              onClick={() => {
+                setVisibleIndex(idx);
+                scrollToCard(idx);
+              }}
+            ></span>
+          ))}
         </div>
       </div>
     </section>
