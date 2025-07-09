@@ -155,7 +155,7 @@ const Projects = () => {
   };
 
   return (
-    <div style={{
+    <div id="projects" style={{
       backgroundColor: '#0a0a0a',
       color: '#ffffff',
       position: 'relative',
