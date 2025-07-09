@@ -3,10 +3,10 @@ import React from 'react';
 const Projects = () => {
   const projects = [
     {
-      title: "AI Recruitment System",
+      title: "RecruitWise: AI Recruitment System",
       type: "Final Year Project • LLM-Powered",
       description: "Revolutionary conversational AI system that conducts technical interviews autonomously. Features automated resume screening, intelligent questioning, and comprehensive candidate scoring using RAG-based architecture.",
-      technologies: ["Python", "LLM", "RAG", "FastAPI", "Docker"]
+      technologies: ["Python","Llama","NLP","GROQ", "LLM", "RAG", "FastAPI", "Docker"]
     },
     {
       title: "Real-time E-commerce Pipeline",
@@ -18,7 +18,7 @@ const Projects = () => {
       title: "Medical AI Predictor",
       type: "Healthcare ML • Clinical Impact",
       description: "Advanced machine learning system for predicting Acute Kidney Injury risk in hospital patients. Achieved exceptional AUC-ROC scores providing actionable clinical insights for healthcare professionals.",
-      technologies: ["Python", "XGBoost", "Random Forest", "SQL", "Healthcare"]
+      technologies: ["Python", "XGBoost", "Random Forest", "SQL", "Healthcare", "Google Big Query"]
     },
     {
       title: "Kaggle Competition Models",

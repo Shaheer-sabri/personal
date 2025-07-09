@@ -456,20 +456,44 @@ nav {
 
 /* Projects Section */
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
 }
 
-.project-card {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
+.projects-grid::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
+
+
+.project-card {
+  flex: 0 0 auto; /* prevent shrinking, keep fixed width */
+  width: 350px;   /* adjust as needed */
+  scroll-snap-align: start;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.projects-container {
+  overflow-x: hidden;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .project-card {
+    width: 80vw; /* Responsive width on small screens */
+  }
+}
+
 
 .project-card:hover {
     transform: translateY(-15px);
