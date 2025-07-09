@@ -554,6 +554,63 @@ nav {
     border: 1px solid var(--glass-border);
 }
 
+
+.projects-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--glass);
+  color: var(--text-primary);
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.scroll-btn.left {
+  left: -10px;
+}
+
+.scroll-btn.right {
+  right: -10px;
+}
+
+.projects-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding: 2rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.projects-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 350px;
+  scroll-snap-align: start;
+}
+
+
 /* Experience Section */
 .experience-timeline {
     position: relative;

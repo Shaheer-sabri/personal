@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const Projects = () => {
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    const container = scrollRef.current;
+    const scrollAmount = 400; // adjust as needed
+    if (container) {
+      container.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const projects = [
     {
       title: "RecruitWise: AI Recruitment System",
       type: "Final Year Project • LLM-Powered",
       description: "Revolutionary conversational AI system that conducts technical interviews autonomously. Features automated resume screening, intelligent questioning, and comprehensive candidate scoring using RAG-based architecture.",
-      technologies: ["Python","Llama","NLP","GROQ", "LLM", "RAG", "FastAPI", "Docker"]
+      technologies: ["Python", "Llama", "NLP", "GROQ", "LLM", "RAG", "FastAPI", "Docker"]
     },
     {
       title: "Real-time E-commerce Pipeline",
@@ -32,23 +45,28 @@ const Projects = () => {
     <section id="projects" className="section">
       <div className="container">
         <h2 className="section-title">Featured Projects</h2>
-        <div className="projects-grid">
-          {projects.map((project, index) => (
-            <div key={index} className="project-card">
-              <div className="project-header">
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-type">{project.type}</p>
-                <p className="project-description">{project.description}</p>
-                <div className="project-tech">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span key={techIndex} className="tech-tag">
-                      {tech}
-                    </span>
-                  ))}
+
+        <div className="projects-wrapper">
+          <button onClick={() => scroll(-1)} className="scroll-btn left">‹</button>
+
+          <div className="projects-grid" ref={scrollRef}>
+            {projects.map((project, index) => (
+              <div key={index} className="project-card">
+                <div className="project-header">
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-type">{project.type}</p>
+                  <p className="project-description">{project.description}</p>
+                  <div className="project-tech">
+                    {project.technologies.map((tech, techIndex) => (
+                      <span key={techIndex} className="tech-tag">{tech}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <button onClick={() => scroll(1)} className="scroll-btn right">›</button>
         </div>
       </div>
     </section>
