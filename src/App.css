@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import '@fortawesome/fontawesome-free/css/all.min.css';
-
 :root {
     --primary: #0a0a0a;
     --secondary: #1a1a1a;
@@ -158,8 +157,9 @@ nav {
     text-align: center;
     position: relative;
     overflow: hidden;
-    padding-top: 80px;
+    padding-top: 80px; /* ✅ Add this line */
 }
+
 
 .hero-content {
     max-width: 800px;
@@ -243,11 +243,12 @@ nav {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    display: inline-flex; /* was inline-block */
+    align-items: center;   /* vertically center */
+    justify-content: center; /* horizontally center */
+    text-align: center;    /* ensures inline text is centered */
 }
+
 
 .btn-primary {
     background: var(--gradient-3);
@@ -277,10 +278,11 @@ nav {
 }
 
 .scroll-indicator {
-    margin-top: 2rem;
-    text-align: center;
-    animation: bounce 2s infinite;
+  margin-top: 2rem;
+  text-align: center;
+  animation: bounce 2s infinite;
 }
+
 
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -453,79 +455,50 @@ nav {
 }
 
 /* Projects Section */
-.projects-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.scroll-btn {
-    background: var(--glass);
-    color: var(--text-primary);
-    border: none;
-    font-size: 2rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.scroll-btn:hover {
-    background: var(--accent);
-    color: var(--primary);
-}
-
 .projects-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 2rem;
-    padding: 1rem 0;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
 }
 
 .projects-grid::-webkit-scrollbar {
-    display: none;
+  display: none; /* Chrome/Safari */
+}
+
+
+.project-card {
+  flex: 0 0 auto; /* prevent shrinking, keep fixed width */
+  width: 350px;   /* adjust as needed */
+  scroll-snap-align: start;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .projects-container {
-    overflow-x: hidden;
-    padding: 0 2rem;
+  overflow-x: hidden;
+  padding: 0 2rem;
 }
 
-.project-card {
-    flex: 0 0 auto;
-    width: 350px;
-    scroll-snap-align: center;
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    position: relative;
-    opacity: 0.4;
-    transform: scale(0.9);
+@media (max-width: 768px) {
+  .project-card {
+    width: 80vw; /* Responsive width on small screens */
+  }
 }
+
 
 .project-card:hover {
     transform: translateY(-15px);
     border-color: var(--accent);
     box-shadow: 0 30px 60px rgba(0, 212, 255, 0.2);
-}
-
-.project-card.focused {
-    opacity: 1;
-    transform: scale(1.05);
-    background: var(--surface-hover);
-    border-color: var(--accent);
-    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
 }
 
 .project-header {
@@ -581,25 +554,101 @@ nav {
     border: 1px solid var(--glass-border);
 }
 
+
+.projects-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.scroll-btn {
+  background: var(--glass);
+  color: var(--text-primary);
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.scroll-btn.left {
+  margin-right: 1rem;
+}
+
+.scroll-btn.right {
+  margin-left: 1rem;
+}
+
+.projects-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 1rem;
+  scroll-behavior: smooth;
+}
+
+.projects-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 350px;
+  scroll-snap-align: center;
+}
+
 .scroll-indicators {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .indicator-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--glass-border);
-    cursor: pointer;
-    transition: background 0.3s ease;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .indicator-dot.active {
-    background: var(--accent);
+  background: var(--accent);
 }
+
+.project-card {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0.4;
+  transform: scale(0.9);
+}
+
+.project-card.focused {
+  opacity: 1;
+  transform: scale(1.05);
+  z-index: 2;
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+.project-card.faded {
+  opacity: 0.4;
+  transform: scale(0.9);
+  z-index: 1;
+}
+
 
 /* Experience Section */
 .experience-timeline {
@@ -801,18 +850,6 @@ footer {
         align-items: center;
     }
 
-    .hero {
-        padding-bottom: 100px;
-    }
-
-    .hero-content {
-        padding-bottom: 5rem;
-    }
-
-    .resume-download {
-        margin-bottom: 2rem;
-    }
-
     .experience-timeline::before {
         left: 20px;
     }
@@ -841,12 +878,12 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .contact-links {
+    .projects-grid {
         grid-template-columns: 1fr;
     }
 
-    .project-card {
-        width: 80vw;
+    .contact-links {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -859,6 +896,14 @@ footer {
         width: 200px;
         height: 200px;
     }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 0 2rem;
+      animation: fadeInUp 1s ease-out;
+      padding-bottom: 5rem; /* Add this line */
+    }
+
 
     .nav-links {
         gap: 1rem;
@@ -882,4 +927,100 @@ footer {
         height: 45px;
         font-size: 1.1rem;
     }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-bottom: 100px; /* More breathing room on smaller screens */
+  }
+
+  .resume-download {
+    margin-bottom: 2rem; /* Add spacing for safety */
+  }
+
+  .scroll-indicator {
+    bottom: 1rem;
+  }
+}
+
+
+
+.projects-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.scroll-btn {
+  background: var(--glass);
+  color: var(--text-primary);
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.projects-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding: 1rem 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.projects-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 350px;
+  scroll-snap-align: center;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.project-card.focused {
+  opacity: 1;
+  transform: scale(1.05);
+  z-index: 2;
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+.scroll-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: var(--accent);
 }

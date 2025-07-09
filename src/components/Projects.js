@@ -4,6 +4,7 @@ const Projects = () => {
   const scrollRef = useRef(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const touchStartX = useRef(0);
+  const isScrolling = useRef(false);
 
   const projects = [
     {
@@ -36,50 +37,87 @@ const Projects = () => {
     }
   ];
 
-  const scrollToCard = (index) => {
+  // Create infinite array by duplicating projects multiple times
+  const infiniteProjects = [...projects, ...projects, ...projects];
+  const originalLength = projects.length;
+  const startIndex = originalLength; // Start at the second copy (middle)
+
+  const scrollToCard = (index, smooth = true) => {
     const container = scrollRef.current;
     if (!container) return;
     
     const containerWidth = container.offsetWidth;
-    const cardWidth = 300; // Fixed card width
-    const gap = 24; // Gap between cards
+    const cardWidth = 350;
+    const gap = 32;
     const totalCardWidth = cardWidth + gap;
     
-    // Calculate scroll position to center the selected card
     const scrollLeft = index * totalCardWidth - (containerWidth - cardWidth) / 2;
     
     container.scrollTo({
-      left: scrollLeft,
-      behavior: 'smooth'
+      left: Math.max(0, scrollLeft),
+      behavior: smooth ? 'smooth' : 'auto'
     });
   };
 
   const scroll = (direction) => {
-    const newIndex = (visibleIndex + direction + projects.length) % projects.length;
+    const newIndex = visibleIndex + direction;
     setVisibleIndex(newIndex);
     scrollToCard(newIndex);
   };
 
   const updateIndexOnScroll = () => {
+    if (isScrolling.current) return;
+    
     const container = scrollRef.current;
     if (!container) return;
     
     const containerWidth = container.offsetWidth;
     const scrollLeft = container.scrollLeft;
-    const cardWidth = 300;
-    const gap = 24;
+    const cardWidth = 350;
+    const gap = 32;
     const totalCardWidth = cardWidth + gap;
     
-    // Calculate which card is closest to center
     const centerPosition = scrollLeft + containerWidth / 2;
     const index = Math.round(centerPosition / totalCardWidth);
     
-    if (index !== visibleIndex) {
-      setVisibleIndex(Math.max(0, Math.min(index, projects.length - 1)));
+    const clampedIndex = Math.max(0, Math.min(index, infiniteProjects.length - 1));
+    
+    // Handle infinite loop reset - only reset when we're in the first or last copy
+    if (clampedIndex < originalLength) {
+      // If we're in the first copy, jump to the equivalent position in the second copy
+      const newIndex = clampedIndex + originalLength;
+      isScrolling.current = true;
+      setVisibleIndex(newIndex);
+      scrollToCard(newIndex, false);
+      setTimeout(() => {
+        isScrolling.current = false;
+      }, 50);
+    } else if (clampedIndex >= originalLength * 2) {
+      // If we're in the third copy, jump to the equivalent position in the second copy
+      const newIndex = clampedIndex - originalLength;
+      isScrolling.current = true;
+      setVisibleIndex(newIndex);
+      scrollToCard(newIndex, false);
+      setTimeout(() => {
+        isScrolling.current = false;
+      }, 50);
+    } else if (clampedIndex !== visibleIndex) {
+      setVisibleIndex(clampedIndex);
     }
   };
 
-  // Auto-scroll every 5 seconds
+  const getActualIndex = (index) => {
+    return index % originalLength;
+  };
+
+  // Initialize carousel at the center (RecruitWise)
+  useEffect(() => {
+    setVisibleIndex(startIndex);
+    setTimeout(() => {
+      scrollToCard(startIndex, false);
+    }, 100);
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       scroll(1);
@@ -87,20 +125,14 @@ const Projects = () => {
     return () => clearInterval(interval);
   }, [visibleIndex]);
 
-  // Sync scroll index on manual drag
   useEffect(() => {
     const container = scrollRef.current;
     if (container) {
       container.addEventListener('scroll', updateIndexOnScroll);
+      return () => container.removeEventListener('scroll', updateIndexOnScroll);
     }
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', updateIndexOnScroll);
-      }
-    };
   }, [visibleIndex]);
 
-  // Touch events
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -114,54 +146,275 @@ const Projects = () => {
     }
   };
 
+  const handleDotClick = (dotIndex) => {
+    // Find the closest instance of the desired project in the infinite array
+    const currentActualIndex = getActualIndex(visibleIndex);
+    const targetIndex = startIndex + (dotIndex - currentActualIndex);
+    setVisibleIndex(targetIndex);
+    scrollToCard(targetIndex);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <section id="projects" className="py-20">
-        <div className="max-w-6xl mx-auto px-8">
-          <h2 className="text-4xl font-bold text-center mb-16 relative">
+    <div style={{
+      backgroundColor: '#0a0a0a',
+      color: '#ffffff',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: 'Inter, sans-serif'
+    }}>
+      {/* Dynamic Background Effects */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: -1,
+        transition: 'all 1s ease-in-out'
+      }}>
+        {/* Base animated orbs */}
+        <div style={{
+          position: 'absolute',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          filter: 'blur(100px)',
+          opacity: 0.2,
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          top: '10%',
+          left: '10%',
+          animation: 'float 20s ease-in-out infinite'
+        }}></div>
+        <div style={{
+          position: 'absolute',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          filter: 'blur(100px)',
+          opacity: 0.2,
+          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          top: '60%',
+          right: '10%',
+          animation: 'float 20s ease-in-out infinite',
+          animationDelay: '-10s'
+        }}></div>
+        <div style={{
+          position: 'absolute',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          filter: 'blur(100px)',
+          opacity: 0.2,
+          background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+          bottom: '10%',
+          left: '50%',
+          animation: 'float 20s ease-in-out infinite',
+          animationDelay: '-5s'
+        }}></div>
+        
+        {/* Dynamic project-specific background overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: 0.15,
+          transition: 'all 1.5s ease-in-out',
+          background: getActualIndex(visibleIndex) === 0 
+            ? 'radial-gradient(circle at 50% 50%, rgba(79, 172, 254, 0.3) 0%, rgba(0, 242, 254, 0.2) 30%, rgba(10, 10, 10, 0.8) 70%)'
+            : getActualIndex(visibleIndex) === 1
+            ? 'radial-gradient(circle at 50% 50%, rgba(240, 147, 251, 0.3) 0%, rgba(245, 87, 108, 0.2) 30%, rgba(10, 10, 10, 0.8) 70%)'
+            : getActualIndex(visibleIndex) === 2
+            ? 'radial-gradient(circle at 50% 50%, rgba(67, 233, 123, 0.3) 0%, rgba(56, 249, 215, 0.2) 30%, rgba(10, 10, 10, 0.8) 70%)'
+            : 'radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.2) 30%, rgba(10, 10, 10, 0.8) 70%)'
+        }}></div>
+        
+        {/* Subtle gradient overlay for smooth transitions */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.7) 0%, rgba(10, 10, 10, 0.9) 100%)',
+          mixBlendMode: 'multiply'
+        }}></div>
+      </div>
+
+      <section style={{ padding: '8rem 0', position: 'relative', zIndex: 10 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+          <h2 style={{
+            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontWeight: 700,
+            textAlign: 'center',
+            marginBottom: '4rem',
+            position: 'relative'
+          }}>
             Featured Projects
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-blue-400 rounded-full -mb-4"></div>
+            <div style={{
+              content: '""',
+              position: 'absolute',
+              bottom: '-1rem',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '100px',
+              height: '4px',
+              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              borderRadius: '2px'
+            }}></div>
           </h2>
 
-          <div className="projects-wrapper relative flex items-center justify-center gap-4 mb-4">
-            <button onClick={() => scroll(-1)} className="z-10 bg-gray-800 bg-opacity-50 text-white border-none text-3xl p-3 cursor-pointer backdrop-blur-sm rounded-full transition-all duration-300 hover:bg-blue-500 hover:text-black">
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginBottom: '1rem'
+          }}>
+            <button 
+              onClick={() => scroll(-1)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '2rem',
+                padding: '0.5rem 1rem',
+                cursor: 'pointer',
+                zIndex: 2,
+                backdropFilter: 'blur(10px)',
+                borderRadius: '50%',
+                transition: 'all 0.3s ease',
+                width: '50px',
+                height: '50px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = '#00d4ff';
+                e.target.style.color = '#0a0a0a';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.target.style.color = '#ffffff';
+              }}
+            >
               ‹
             </button>
 
-            <div className="relative w-full max-w-4xl overflow-hidden">
-              <div
-                className="flex gap-6 overflow-x-auto scrollbar-hide smooth-scroll"
-                ref={scrollRef}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch',
-                  scrollBehavior: 'smooth'
-                }}
-              >
-                {projects.map((project, index) => (
+            <div style={{
+              display: 'flex',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              gap: '2rem',
+              padding: '1rem 0',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+            ref={scrollRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            >
+              {infiniteProjects.map((project, index) => {
+                const actualIndex = getActualIndex(index);
+                const isActive = index === visibleIndex;
+                
+                return (
                   <div
                     key={index}
-                    className={`flex-none w-80 h-96 rounded-2xl overflow-hidden transition-all duration-400 ${
-                      index === visibleIndex
-                        ? 'opacity-100 scale-105 bg-gray-800 border-2 border-blue-400 shadow-2xl shadow-blue-400/20'
-                        : 'opacity-60 scale-95 bg-gray-800 bg-opacity-50 border border-gray-700'
-                    }`}
+                    style={{
+                      flex: '0 0 auto',
+                      width: '350px',
+                      scrollSnapAlign: 'center',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      backdropFilter: 'blur(20px)',
+                      border: isActive 
+                        ? '1px solid #00d4ff'
+                        : '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '20px',
+                      overflow: 'hidden',
+                      transition: 'all 0.3s ease',
+                      position: 'relative',
+                      opacity: isActive ? 1 : 0.4,
+                      transform: isActive ? 'scale(1.05)' : 'scale(0.9)',
+                      zIndex: isActive ? 2 : 1,
+                      boxShadow: isActive 
+                        ? '0 30px 60px rgba(0, 212, 255, 0.2)'
+                        : 'none'
+                    }}
                   >
-                    <div className="p-6 h-full relative">
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '4px',
+                      background: actualIndex === 0 
+                        ? 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                        : actualIndex === 1
+                        ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                        : actualIndex === 2
+                        ? 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    }}></div>
+                    
+                    <div style={{ padding: '2rem' }}>
+                      <h3 style={{
+                        fontSize: '1.3rem',
+                        fontWeight: 600,
+                        marginBottom: '0.5rem',
+                        color: '#ffffff'
+                      }}>
+                        {project.title}
+                      </h3>
                       
-                      <h3 className="text-lg font-semibold mb-2 text-white">{project.title}</h3>
-                      <p className="text-gray-400 text-sm mb-4">{project.type}</p>
-                      <p className="text-gray-300 text-sm leading-relaxed mb-6">{project.description}</p>
+                      <p style={{
+                        color: '#666666',
+                        fontSize: '0.9rem',
+                        marginBottom: '1rem'
+                      }}>
+                        {project.type}
+                      </p>
                       
-                      <div className="flex flex-wrap gap-2 absolute bottom-6 left-6 right-6">
+                      <p style={{
+                        color: '#a0a0a0',
+                        lineHeight: 1.6,
+                        marginBottom: '1.5rem'
+                      }}>
+                        {project.description}
+                      </p>
+                      
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.8rem'
+                      }}>
                         {project.technologies.map((tech, techIndex) => (
                           <span 
-                            key={techIndex} 
-                            className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-xs border border-gray-600"
+                            key={techIndex}
+                            style={{
+                              background: '#111111',
+                              color: '#a0a0a0',
+                              padding: '0.5rem 1rem',
+                              borderRadius: '25px',
+                              fontSize: '0.9rem',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              transition: 'all 0.3s ease',
+                              cursor: 'pointer'
+                            }}
+                            onMouseOver={(e) => {
+                              e.target.style.background = '#00d4ff';
+                              e.target.style.color = '#0a0a0a';
+                              e.target.style.transform = 'translateY(-2px)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.target.style.background = '#111111';
+                              e.target.style.color = '#a0a0a0';
+                              e.target.style.transform = 'translateY(0)';
+                            }}
                           >
                             {tech}
                           </span>
@@ -169,31 +422,78 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
 
-            <button onClick={() => scroll(1)} className="z-10 bg-gray-800 bg-opacity-50 text-white border-none text-3xl p-3 cursor-pointer backdrop-blur-sm rounded-full transition-all duration-300 hover:bg-blue-500 hover:text-black">
+            <button 
+              onClick={() => scroll(1)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '2rem',
+                padding: '0.5rem 1rem',
+                cursor: 'pointer',
+                zIndex: 2,
+                backdropFilter: 'blur(10px)',
+                borderRadius: '50%',
+                transition: 'all 0.3s ease',
+                width: '50px',
+                height: '50px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = '#00d4ff';
+                e.target.style.color = '#0a0a0a';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.target.style.color = '#ffffff';
+              }}
+            >
               ›
             </button>
           </div>
 
-          <div className="flex justify-center gap-2 mt-4">
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginTop: '1rem'
+          }}>
             {projects.map((_, idx) => (
-              <span
+              <button
                 key={idx}
-                className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
-                  idx === visibleIndex ? 'bg-blue-400' : 'bg-gray-600'
-                }`}
-                onClick={() => {
-                  setVisibleIndex(idx);
-                  scrollToCard(idx);
+                style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  transition: 'background 0.3s ease',
+                  background: idx === getActualIndex(visibleIndex) ? '#00d4ff' : 'rgba(255, 255, 255, 0.1)',
+                  border: 'none'
                 }}
-              ></span>
+                onClick={() => handleDotClick(idx)}
+              />
             ))}
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-30px) rotate(120deg); }
+          66% { transform: translateY(30px) rotate(240deg); }
+        }
+
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 };
