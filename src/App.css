@@ -807,3 +807,13 @@ footer {
         font-size: 1.1rem;
     }
 }
+
+@media (max-width: 768px) {
+  .scroll-indicator {
+    bottom: 1rem; /* Reduce the position or adjust as needed */
+  }
+
+  .resume-download {
+    margin-bottom: 3rem; /* Add spacing between resume button and scroll indicator */
+  }
+}
