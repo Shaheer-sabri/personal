@@ -5,6 +5,7 @@ const Projects = () => {
   const [visibleIndex, setVisibleIndex] = useState(0);
   const touchStartX = useRef(0);
   const isScrolling = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const projects = [
     {
@@ -42,13 +43,34 @@ const Projects = () => {
   const originalLength = projects.length;
   const startIndex = originalLength; // Start at the second copy (middle)
 
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const getCardWidth = () => {
+    if (window.innerWidth < 480) return window.innerWidth - 40; // Small phones
+    if (window.innerWidth < 768) return window.innerWidth - 80; // Larger phones
+    return 350; // Desktop
+  };
+
+  const getGap = () => {
+    return window.innerWidth < 768 ? 16 : 32;
+  };
+
   const scrollToCard = (index, smooth = true) => {
     const container = scrollRef.current;
     if (!container) return;
     
     const containerWidth = container.offsetWidth;
-    const cardWidth = 350;
-    const gap = 32;
+    const cardWidth = getCardWidth();
+    const gap = getGap();
     const totalCardWidth = cardWidth + gap;
     
     const scrollLeft = index * totalCardWidth - (containerWidth - cardWidth) / 2;
@@ -73,8 +95,8 @@ const Projects = () => {
     
     const containerWidth = container.offsetWidth;
     const scrollLeft = container.scrollLeft;
-    const cardWidth = 350;
-    const gap = 32;
+    const cardWidth = getCardWidth();
+    const gap = getGap();
     const totalCardWidth = cardWidth + gap;
     
     const centerPosition = scrollLeft + containerWidth / 2;
@@ -176,8 +198,8 @@ const Projects = () => {
         {/* Base animated orbs */}
         <div style={{
           position: 'absolute',
-          width: '600px',
-          height: '600px',
+          width: isMobile ? '300px' : '600px',
+          height: isMobile ? '300px' : '600px',
           borderRadius: '50%',
           filter: 'blur(100px)',
           opacity: 0.2,
@@ -188,8 +210,8 @@ const Projects = () => {
         }}></div>
         <div style={{
           position: 'absolute',
-          width: '600px',
-          height: '600px',
+          width: isMobile ? '300px' : '600px',
+          height: isMobile ? '300px' : '600px',
           borderRadius: '50%',
           filter: 'blur(100px)',
           opacity: 0.2,
@@ -201,8 +223,8 @@ const Projects = () => {
         }}></div>
         <div style={{
           position: 'absolute',
-          width: '600px',
-          height: '600px',
+          width: isMobile ? '300px' : '600px',
+          height: isMobile ? '300px' : '600px',
           borderRadius: '50%',
           filter: 'blur(100px)',
           opacity: 0.2,
@@ -243,13 +265,21 @@ const Projects = () => {
         }}></div>
       </div>
 
-      <section style={{ padding: '8rem 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+      <section style={{ 
+        padding: isMobile ? '4rem 0' : '8rem 0', 
+        position: 'relative', 
+        zIndex: 10 
+      }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          padding: isMobile ? '0 1rem' : '0 2rem' 
+        }}>
           <h2 style={{
-            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontSize: isMobile ? '2rem' : 'clamp(2rem, 5vw, 3rem)',
             fontWeight: 700,
             textAlign: 'center',
-            marginBottom: '4rem',
+            marginBottom: isMobile ? '2rem' : '4rem',
             position: 'relative'
           }}>
             Featured Projects
@@ -271,48 +301,52 @@ const Projects = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1rem',
+            gap: isMobile ? '0.5rem' : '1rem',
             marginBottom: '1rem'
           }}>
-            <button 
-              onClick={() => scroll(-1)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: '#ffffff',
-                border: 'none',
-                fontSize: '2rem',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                zIndex: 2,
-                backdropFilter: 'blur(10px)',
-                borderRadius: '50%',
-                transition: 'all 0.3s ease',
-                width: '50px',
-                height: '50px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onMouseOver={(e) => {
-                e.target.style.background = '#00d4ff';
-                e.target.style.color = '#0a0a0a';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.05)';
-                e.target.style.color = '#ffffff';
-              }}
-            >
-              ‹
-            </button>
+            {/* Hide navigation buttons on mobile for better UX */}
+            {!isMobile && (
+              <button 
+                onClick={() => scroll(-1)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '2rem',
+                  padding: '0.5rem 1rem',
+                  cursor: 'pointer',
+                  zIndex: 2,
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '50%',
+                  transition: 'all 0.3s ease',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = '#00d4ff';
+                  e.target.style.color = '#0a0a0a';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                  e.target.style.color = '#ffffff';
+                }}
+              >
+                ‹
+              </button>
+            )}
 
             <div style={{
               display: 'flex',
               overflowX: 'auto',
               scrollSnapType: 'x mandatory',
-              gap: '2rem',
+              gap: isMobile ? '1rem' : '2rem',
               padding: '1rem 0',
               scrollbarWidth: 'none',
-              msOverflowStyle: 'none'
+              msOverflowStyle: 'none',
+              width: isMobile ? '100%' : 'auto'
             }}
             ref={scrollRef}
             onTouchStart={handleTouchStart}
@@ -327,19 +361,19 @@ const Projects = () => {
                     key={index}
                     style={{
                       flex: '0 0 auto',
-                      width: '350px',
+                      width: isMobile ? `${getCardWidth()}px` : '350px',
                       scrollSnapAlign: 'center',
                       background: 'rgba(255, 255, 255, 0.05)',
                       backdropFilter: 'blur(20px)',
                       border: isActive 
                         ? '1px solid #00d4ff'
                         : '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '20px',
+                      borderRadius: isMobile ? '16px' : '20px',
                       overflow: 'hidden',
                       transition: 'all 0.3s ease',
                       position: 'relative',
-                      opacity: isActive ? 1 : 0.4,
-                      transform: isActive ? 'scale(1.05)' : 'scale(0.9)',
+                      opacity: isActive ? 1 : (isMobile ? 0.7 : 0.4),
+                      transform: isActive ? (isMobile ? 'scale(1.02)' : 'scale(1.05)') : (isMobile ? 'scale(0.95)' : 'scale(0.9)'),
                       zIndex: isActive ? 2 : 1,
                       boxShadow: isActive 
                         ? '0 30px 60px rgba(0, 212, 255, 0.2)'
@@ -361,19 +395,20 @@ const Projects = () => {
                         : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
                     }}></div>
                     
-                    <div style={{ padding: '2rem' }}>
+                    <div style={{ padding: isMobile ? '1.5rem' : '2rem' }}>
                       <h3 style={{
-                        fontSize: '1.3rem',
+                        fontSize: isMobile ? '1.1rem' : '1.3rem',
                         fontWeight: 600,
                         marginBottom: '0.5rem',
-                        color: '#ffffff'
+                        color: '#ffffff',
+                        lineHeight: 1.2
                       }}>
                         {project.title}
                       </h3>
                       
                       <p style={{
                         color: '#666666',
-                        fontSize: '0.9rem',
+                        fontSize: isMobile ? '0.8rem' : '0.9rem',
                         marginBottom: '1rem'
                       }}>
                         {project.type}
@@ -382,7 +417,8 @@ const Projects = () => {
                       <p style={{
                         color: '#a0a0a0',
                         lineHeight: 1.6,
-                        marginBottom: '1.5rem'
+                        marginBottom: '1.5rem',
+                        fontSize: isMobile ? '0.9rem' : '1rem'
                       }}>
                         {project.description}
                       </p>
@@ -390,7 +426,7 @@ const Projects = () => {
                       <div style={{
                         display: 'flex',
                         flexWrap: 'wrap',
-                        gap: '0.8rem'
+                        gap: isMobile ? '0.5rem' : '0.8rem'
                       }}>
                         {project.technologies.map((tech, techIndex) => (
                           <span 
@@ -398,22 +434,26 @@ const Projects = () => {
                             style={{
                               background: '#111111',
                               color: '#a0a0a0',
-                              padding: '0.5rem 1rem',
+                              padding: isMobile ? '0.4rem 0.8rem' : '0.5rem 1rem',
                               borderRadius: '25px',
-                              fontSize: '0.9rem',
+                              fontSize: isMobile ? '0.8rem' : '0.9rem',
                               border: '1px solid rgba(255, 255, 255, 0.1)',
                               transition: 'all 0.3s ease',
                               cursor: 'pointer'
                             }}
                             onMouseOver={(e) => {
-                              e.target.style.background = '#00d4ff';
-                              e.target.style.color = '#0a0a0a';
-                              e.target.style.transform = 'translateY(-2px)';
+                              if (!isMobile) {
+                                e.target.style.background = '#00d4ff';
+                                e.target.style.color = '#0a0a0a';
+                                e.target.style.transform = 'translateY(-2px)';
+                              }
                             }}
                             onMouseOut={(e) => {
-                              e.target.style.background = '#111111';
-                              e.target.style.color = '#a0a0a0';
-                              e.target.style.transform = 'translateY(0)';
+                              if (!isMobile) {
+                                e.target.style.background = '#111111';
+                                e.target.style.color = '#a0a0a0';
+                                e.target.style.transform = 'translateY(0)';
+                              }
                             }}
                           >
                             {tech}
@@ -426,36 +466,38 @@ const Projects = () => {
               })}
             </div>
 
-            <button 
-              onClick={() => scroll(1)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: '#ffffff',
-                border: 'none',
-                fontSize: '2rem',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                zIndex: 2,
-                backdropFilter: 'blur(10px)',
-                borderRadius: '50%',
-                transition: 'all 0.3s ease',
-                width: '50px',
-                height: '50px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onMouseOver={(e) => {
-                e.target.style.background = '#00d4ff';
-                e.target.style.color = '#0a0a0a';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.05)';
-                e.target.style.color = '#ffffff';
-              }}
-            >
-              ›
-            </button>
+            {!isMobile && (
+              <button 
+                onClick={() => scroll(1)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '2rem',
+                  padding: '0.5rem 1rem',
+                  cursor: 'pointer',
+                  zIndex: 2,
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '50%',
+                  transition: 'all 0.3s ease',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = '#00d4ff';
+                  e.target.style.color = '#0a0a0a';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                  e.target.style.color = '#ffffff';
+                }}
+              >
+                ›
+              </button>
+            )}
           </div>
 
           <div style={{
@@ -468,8 +510,8 @@ const Projects = () => {
               <button
                 key={idx}
                 style={{
-                  width: '10px',
-                  height: '10px',
+                  width: isMobile ? '8px' : '10px',
+                  height: isMobile ? '8px' : '10px',
                   borderRadius: '50%',
                   cursor: 'pointer',
                   transition: 'background 0.3s ease',
@@ -492,6 +534,13 @@ const Projects = () => {
 
         div::-webkit-scrollbar {
           display: none;
+        }
+
+        /* Improve touch scrolling on mobile */
+        @media (max-width: 768px) {
+          * {
+            -webkit-overflow-scrolling: touch;
+          }
         }
       `}</style>
     </div>
