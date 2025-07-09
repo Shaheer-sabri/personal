@@ -594,10 +594,8 @@ nav {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 2rem;
-  padding: 1rem 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  scroll-padding-left: 1rem;
+  scroll-behavior: smooth;
 }
 
 .projects-grid::-webkit-scrollbar {
@@ -607,7 +605,7 @@ nav {
 .project-card {
   flex: 0 0 auto;
   width: 350px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 .scroll-indicators {
@@ -628,6 +626,27 @@ nav {
 
 .indicator-dot.active {
   background: var(--accent);
+}
+
+.project-card {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0.4;
+  transform: scale(0.9);
+}
+
+.project-card.focused {
+  opacity: 1;
+  transform: scale(1.05);
+  z-index: 2;
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+.project-card.faded {
+  opacity: 0.4;
+  transform: scale(0.9);
+  z-index: 1;
 }
 
 
@@ -922,4 +941,86 @@ footer {
   .scroll-indicator {
     bottom: 1rem;
   }
+}
+
+
+
+.projects-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.scroll-btn {
+  background: var(--glass);
+  color: var(--text-primary);
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.projects-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding: 1rem 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.projects-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 350px;
+  scroll-snap-align: center;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.project-card.focused {
+  opacity: 1;
+  transform: scale(1.05);
+  z-index: 2;
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+.scroll-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: var(--accent);
 }
