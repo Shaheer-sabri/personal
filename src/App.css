@@ -777,8 +777,12 @@ footer {
     }
 
     .hero-content {
-        padding: 0 1rem;
+      max-width: 800px;
+      padding: 0 2rem;
+      animation: fadeInUp 1s ease-out;
+      padding-bottom: 5rem; /* Add this line */
     }
+
 
     .nav-links {
         gap: 1rem;
