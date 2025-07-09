@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 const Projects = () => {
   const scrollRef = useRef(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const touchStartX = useRef(0);
 
   const projects = [
     {
@@ -35,7 +36,7 @@ const Projects = () => {
     const container = scrollRef.current;
     const cardWidth = container?.children[0]?.offsetWidth || 0;
     container.scrollTo({
-      left: index * (cardWidth + 32), // 32px is gap between cards
+      left: index * (cardWidth + 32), // 32px is the gap
       behavior: 'smooth',
     });
   };
@@ -49,13 +50,21 @@ const Projects = () => {
   const updateIndexOnScroll = () => {
     const container = scrollRef.current;
     if (!container) return;
-
     const scrollLeft = container.scrollLeft;
     const cardWidth = container.children[0]?.offsetWidth || 0;
     const index = Math.round(scrollLeft / (cardWidth + 32));
     setVisibleIndex(index);
   };
 
+  // Auto-advance every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      scroll(1);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [visibleIndex]); // Only reset if index changes
+
+  // Scroll event listener
   useEffect(() => {
     const container = scrollRef.current;
     if (container) {
@@ -68,6 +77,20 @@ const Projects = () => {
     };
   }, []);
 
+  // Touch-drag functionality
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+
+    if (Math.abs(diff) > 50) {
+      scroll(diff > 0 ? 1 : -1);
+    }
+  };
+
   return (
     <section id="projects" className="section">
       <div className="container">
@@ -76,7 +99,12 @@ const Projects = () => {
         <div className="projects-wrapper">
           <button onClick={() => scroll(-1)} className="scroll-btn left">‹</button>
 
-          <div className="projects-grid" ref={scrollRef}>
+          <div
+            className="projects-grid"
+            ref={scrollRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {projects.map((project, index) => (
               <div key={index} className="project-card">
                 <div className="project-header">
