@@ -241,8 +241,12 @@ nav {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    display: inline-block;
+    display: inline-flex; /* was inline-block */
+    align-items: center;   /* vertically center */
+    justify-content: center; /* horizontally center */
+    text-align: center;    /* ensures inline text is centered */
 }
+
 
 .btn-primary {
     background: var(--gradient-3);
