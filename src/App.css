@@ -157,8 +157,9 @@ nav {
     text-align: center;
     position: relative;
     overflow: hidden;
-    padding-bottom: 80px;
+    padding-top: 80px; /* ✅ Add this line */
 }
+
 
 .hero-content {
     max-width: 800px;
