@@ -17,6 +17,14 @@ const Skills = () => {
     {
       title: "Database & Infrastructure",
       skills: ["MongoDB", "Oracle SQL", "Docker", "Streamlit", "Ubuntu", "Cloud"]
+    },
+    {
+      title: "Visualisation",
+      skills: ["Power BI", "Streamlit", "Mathplotlib", "Seaborn"]
+    },
+    {
+      title: "Cloud",
+      skills: ["Azure Data Bricks", "Blob Storage", "Azure ML", "ETL"]
     }
   ];
 
