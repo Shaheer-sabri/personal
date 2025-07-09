@@ -106,19 +106,28 @@ const Projects = () => {
             onTouchEnd={handleTouchEnd}
           >
             {projects.map((project, index) => (
-              <div key={index} className="project-card">
-                <div className="project-header">
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-type">{project.type}</p>
-                  <p className="project-description">{project.description}</p>
-                  <div className="project-tech">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span key={techIndex} className="tech-tag">{tech}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+  <div
+    key={index}
+    className={`project-card ${
+      index === visibleIndex
+        ? 'focused'
+        : 'faded'
+    }`}
+  >
+    <div className="project-header">
+      <h3 className="project-title">{project.title}</h3>
+      <p className="project-type">{project.type}</p>
+      <p className="project-description">{project.description}</p>
+      <div className="project-tech">
+        {project.technologies.map((tech, techIndex) => (
+          <span key={techIndex} className="tech-tag">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+))}
           </div>
 
           <button onClick={() => scroll(1)} className="scroll-btn right">›</button>
