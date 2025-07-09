@@ -157,6 +157,7 @@ nav {
     text-align: center;
     position: relative;
     overflow: hidden;
+    padding-bottom: 80px;
 }
 
 .hero-content {
@@ -809,11 +810,15 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .scroll-indicator {
-    bottom: 1rem; /* Reduce the position or adjust as needed */
+  .hero {
+    padding-bottom: 100px; /* More breathing room on smaller screens */
   }
 
   .resume-download {
-    margin-bottom: 3rem; /* Add spacing between resume button and scroll indicator */
+    margin-bottom: 2rem; /* Add spacing for safety */
+  }
+
+  .scroll-indicator {
+    bottom: 1rem;
   }
 }
