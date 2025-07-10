@@ -7,7 +7,7 @@ const Experience = () => {
       company: "Systems Limited",
       period: "Jul 2024 - Sep 2024",
       responsibilities: [
-        "Developed Gen AI-powered system for automated banking RFP proposal generation",
+        "Assisted in developing a Gen AI-powered system for automated banking RFP proposal generation",
         "Created comprehensive data quality assessment tool for dataset integrity validation",
         "Collaborated with K-Electric on power distribution analysis and energy optimization"
       ]
