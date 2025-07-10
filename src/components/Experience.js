@@ -23,7 +23,7 @@ const Experience = () => {
       ]
     },
     {
-      title: "Freelance Web Development Tutor",
+      title: "Freelance CS Tutor",
       company: "Edmento",
       period: "Apr 2023 - Present",
       responsibilities: [
