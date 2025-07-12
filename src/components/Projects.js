@@ -40,6 +40,12 @@ const Projects = () => {
         "High-performance machine learning models for patient survival prediction and property valuation. Implemented advanced feature engineering and optimization techniques for superior accuracy.",
       technologies: ["Pandas", "Scikit-learn", "TensorFlow", "Feature Engineering"],
       
+    },
+    {
+      title: "Azure ML data Pipeline",
+      type: "Data Science • Cloud",
+      description: "Developed a comprehensive ETL pipeline using Azure Databricks to automate data cleaning and workflow orchestration, with processed data stored in Azure Blob Storage and predictive analytics implemented through Azure ML Workspace.",
+      technologies: ["Azure Databricks", "ETL", "Azure ML", "Azure Databricks"]
     }
   ];
 
