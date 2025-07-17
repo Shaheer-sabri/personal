@@ -22,11 +22,11 @@ const About = () => {
           </div>
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-number">3+</div>
+              <div className="stat-number">1</div>
               <div className="stat-label">Years Experience</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">15+</div>
+              <div className="stat-number">7+</div>
               <div className="stat-label">Projects Built</div>
             </div>
             <div className="stat-card">
@@ -35,7 +35,7 @@ const About = () => {
             </div>
             <div className="stat-card">
               <div className="stat-number">2025</div>
-              <div className="stat-label">Graduating</div>
+              <div className="stat-label">CS Graduate</div>
             </div>
           </div>
         </div>
