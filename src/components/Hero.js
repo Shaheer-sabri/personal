@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero = () => {
   const downloadResume = () => {
-    const resumeUrl = "Syed Shaheer Sabri (1).pdf";
+    const resumeUrl = "Syed Shaheer Sabri(1).pdf";
     const link = document.createElement('a');
     link.href = resumeUrl;
     link.download = "Syed_Shaheer_Sabri_Resume.pdf";
