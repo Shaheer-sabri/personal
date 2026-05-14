@@ -22,7 +22,7 @@ const Projects = () => {
       title: "Real-time E-commerce Pipeline",
       type: "Big Data Architecture • Live Analytics",
       description:
-        "Comprehensive data pipeline processing millions of e-commerce transactions in real-time. Built with enterprise-grade tools for scalable data ingestion, processing, and visualization.",
+        "Comprehensive data pipeline processing millions of e-commerce transactions in real-time. Built with enterprise grade tools for scalable data ingestion, processing, and visualization.",
       technologies: ["Hadoop", "Spark", "Kafka", "HBase", "MongoDB"],
       githubUrl: "https://github.com/zetomic/ecommerce_pipeline" // Replace with actual URL
     },
