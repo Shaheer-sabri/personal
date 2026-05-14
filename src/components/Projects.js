@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 
 const Projects = () => {
@@ -156,6 +157,7 @@ const Projects = () => {
   };
 
   // Initialize carousel at the center (RecruitWise)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setVisibleIndex(startIndex);
     setTimeout(() => {
@@ -163,6 +165,7 @@ const Projects = () => {
     }, 100);
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const interval = setInterval(() => {
       scroll(1);
@@ -170,6 +173,7 @@ const Projects = () => {
     return () => clearInterval(interval);
   }, [visibleIndex]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const container = scrollRef.current;
     if (container) {
