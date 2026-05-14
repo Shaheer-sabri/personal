@@ -21,7 +21,7 @@ const Hero = () => {
     />
     <h1>Syed Shaheer Sabri</h1>
     <p className="hero-subtitle">
-      Data Scientist & AI Engineer crafting intelligent solutions for tomorrow
+      CXP BI Analyst at Daraz · Data Scientist & AI Engineer
     </p>
     <div className="hero-cta">
       <a href="#contact" className="btn btn-primary">Let's Connect</a>

@@ -20,6 +20,13 @@ const Projects = () => {
       githubUrl: "https://github.com/yourusername/recruitwise-ai" // Replace with actual URL
     },
     {
+  title: "Agent Scorecard & Incentive Dashboard",
+  type: "Daraz • Business Intelligence",
+  description:
+    "Led end-to-end development of an agent performance dashboard used for incentive calculations. Took loosely defined KPI requirements, worked across CXP, operations, and finance teams to sharpen definitions, align on measurement logic, and validate data. Built optimized SQL queries on MaxCompute to keep department compute costs within budget, and delivered the final dashboard tracking agent performance at scale.",
+  technologies: ["SQL", "MaxCompute", "Alibaba Cloud", "Data Visualization", "KPI Design"],
+},
+    {
       title: "Real-time E-commerce Pipeline",
       type: "Big Data Architecture • Live Analytics",
       description:
