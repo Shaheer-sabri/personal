@@ -3,6 +3,16 @@ import React from 'react';
 const Experience = () => {
   const experiences = [
     {
+      title: "CXP BI Analyst",
+      company: "Daraz (Alibaba Group)",
+      period: "Jun 2025 - Present",
+      responsibilities: [
+        "Build and maintain data pipelines on Alibaba Cloud (MaxCompute) to support customer experience operations analytics",
+        "Develop agent-level performance metrics including chat concurrency models used for workforce planning",
+        "Design SQL-based reporting workflows that surface actionable insights for CXP leadership"
+      ]
+    },
+    {
       title: "Data Science Intern",
       company: "Systems Limited",
       period: "Jul 2024 - Sep 2024",
